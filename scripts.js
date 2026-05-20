@@ -1,8 +1,8 @@
 let words = document.querySelectorAll(".word");
-words.forEach((word)=>{
+words.forEach((word) => {
     let letters = word.textContent.split("");
-    word.textContent="";
-    letters.forEach((letter)=>{
+    word.textContent = "";
+    letters.forEach((letter) => {
         let span = document.createElement("span");
         span.textContent = letter;
         span.className = "letter";
@@ -11,30 +11,30 @@ words.forEach((word)=>{
 });
 
 let currentWordIndex = 0;
-let maxWordIndex = words.length -1; 
+let maxWordIndex = words.length - 1;
 words[currentWordIndex].style.opacity = "1";
 
-let changeText = ()=>{
+let changeText = () => {
     let currentWord = words[currentWordIndex];
     let nextWord = currentWordIndex === maxWordIndex ? words[0] : words[currentWordIndex + 1];
 
-    Array.from(currentWord.children).forEach((letter,i)=>{
-        setTimeout(()=>{
+    Array.from(currentWord.children).forEach((letter, i) => {
+        setTimeout(() => {
             letter.className = "letter out";
-        },i * 80);
+        }, i * 80);
     });
-    nextWord.style.opacity="1";
-    Array.from(nextWord.children).forEach((letter,i)=>{
+    nextWord.style.opacity = "1";
+    Array.from(nextWord.children).forEach((letter, i) => {
         letter.className = "letter behind";
-        setTimeout(()=>{
+        setTimeout(() => {
             letter.className = "letter in";
-        },340 + i * 80);
+        }, 340 + i * 80);
     })
     currentWordIndex = currentWordIndex === maxWordIndex ? 0 : currentWordIndex + 1;
 };
 
 changeText();
-setInterval(changeText,3000)
+setInterval(changeText, 3000)
 
 let menuIcon = document.querySelector('#menu-icon');
 let navbar = document.querySelector('.navbar');
@@ -49,41 +49,111 @@ window.onscroll = () => {
         let height = window.offsetHeight;
         let id = sec.getAttribute('id');
 
-        if (top >= offset && top < offset + height){
+        if (top >= offset && top < offset + height) {
             navLinks.forEach(links => {
                 links.classList.remove('active');
                 document.querySelector('header nav a[href*=' + id + ']').classList.add('active');
-                
+
             })
         }
     })
 }
+
+document.querySelectorAll('.progress div').forEach(bar => {
+    bar.style.width = bar.style.width;
+});
 
 menuIcon.onclick = () => {
     menuIcon.classList.toggle('bx-x');
     navbar.classList.toggle('active');
 }
 
-// Web Development Popup
-document.querySelector("#open-web-popup").addEventListener("click", function() {
-    document.querySelector("#web-popup").classList.add("active");
-});
-document.querySelector("#web-popup .close-btn").addEventListener("click", function() {
-    document.querySelector("#web-popup").classList.remove("active");
+
+// Java Popup
+const javaBtn = document.querySelector("#open-java-popup");
+if (javaBtn) {
+    javaBtn.addEventListener("click", function () {
+        document.querySelector("#java-popup").classList.add("active");
+    });
+}
+
+// Android Popup
+const androidBtn = document.querySelector("#open-android-popup");
+if (androidBtn) {
+    androidBtn.addEventListener("click", function () {
+        document.querySelector("#android-popup").classList.add("active");
+    });
+}
+
+// Game Popup
+const gameBtn = document.querySelector("#open-game-popup");
+if (gameBtn) {
+    gameBtn.addEventListener("click", function () {
+        document.querySelector("#game-popup").classList.add("active");
+    });
+}
+
+
+// Open popup
+// document.querySelectorAll(".open-project").forEach(btn => {
+//   btn.addEventListener("click", () => {
+//     const project = btn.getAttribute("data-project");
+//     document.getElementById(project + "-popup").classList.add("active");
+//   });
+// });
+
+document.querySelectorAll(".open-project").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        e.preventDefault(); // 🔥 important for mobile
+        const id = btn.dataset.project + "-popup";
+        const popup = document.getElementById(id);
+
+        if (popup) {
+            popup.classList.add("active");
+            document.body.classList.add("popup-open");
+        }
+    });
 });
 
-// Java Development Popup
-document.querySelector("#open-java-popup").addEventListener("click", function() {
-    document.querySelector("#java-popup").classList.add("active");
-});
-document.querySelector("#java-popup .close-btn").addEventListener("click", function() {
-    document.querySelector("#java-popup").classList.remove("active");
+// Close popup
+// document.querySelectorAll(".popup .close-btn").forEach(btn => {
+//   btn.addEventListener("click", () => {
+//     btn.parentElement.classList.remove("active");
+//   });
+// });
+
+document.querySelectorAll(".popup .close-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const popup = btn.closest(".popup");
+        popup.classList.remove("active");
+        document.body.classList.remove("popup-open");
+    });
 });
 
-// App Development Popup
-document.querySelector("#open-app-popup").addEventListener("click", function() {
-    document.querySelector("#app-popup").classList.add("active");
+document.querySelectorAll(".popup").forEach(popup => {
+    popup.addEventListener("click", (e) => {
+        if (e.target === popup) {
+            popup.classList.remove("active");
+            document.body.classList.remove("popup-open");
+        }
+    });
 });
-document.querySelector("#app-popup .close-btn").addEventListener("click", function() {
-    document.querySelector("#app-popup").classList.remove("active");
+
+const boxes = document.querySelectorAll(".projects-container .box");
+
+boxes.forEach(box => {
+    const video = box.querySelector(".project-video");
+
+    if (video) {
+        box.addEventListener("mouseenter", () => {
+            video.style.opacity = "1";
+            video.play();
+        });
+
+        box.addEventListener("mouseleave", () => {
+            video.pause();
+            video.currentTime = 0;
+            video.style.opacity = "0";
+        });
+    }
 });
